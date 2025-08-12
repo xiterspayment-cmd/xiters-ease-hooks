@@ -1,0 +1,16 @@
+{
+  "name": "xiters-ease-hooks",
+  "version": "1.0.0",
+  "description": "Hooks API for Ease Bot (serviço/produto fantasma)",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
