@@ -3,11 +3,11 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
-const EASE_SECRET = process.env.EASE_SECRET || null;
+const EASE_SECRET = process.env.EASE_SECRET || null;  // defina no Render
 const SERVICE_NAME = process.env.SERVICE_NAME || "Xiters";
-const TICKET_URL = process.env.TICKET_URL || null;
+const TICKET_URL = process.env.TICKET_URL || null;    // opcional
 
-// Auth simples por header x-ease-secret (opcional, mas recomendado)
+// Auth simples por header x-ease-secret (recomendado)
 function auth(req, res, next) {
   if (!EASE_SECRET) return next();
   const token = req.headers["x-ease-secret"];
@@ -15,12 +15,12 @@ function auth(req, res, next) {
   next();
 }
 
-// Healthcheck
+// Health
 app.get("/", (req, res) => {
   res.json({ ok: true, name: SERVICE_NAME, uptime: process.uptime() });
 });
 
-// 1) CHECK STOCK → NÃO DEVOLVE stock_count
+// 1) CHECK STOCK -> só "continue". NÃO mande stock_count
 app.post("/check_stock", auth, (req, res) => {
   return res.json({
     status: "continue",
@@ -28,9 +28,9 @@ app.post("/check_stock", auth, (req, res) => {
   });
 });
 
-// 2) GET STOCK (pagamento aprovado) → NÃO DEVOLVE stock_count, NÃO DEVOLVE items
+// 2) GET STOCK (pagamento aprovado) -> mensagens; NÃO mande stock_count nem items
 app.post("/get_stock", auth, (req, res) => {
-  const base = {
+  const resp = {
     status: "success",
     items: [],
     is_to_make_delivery: false,
@@ -39,13 +39,13 @@ app.post("/get_stock", auth, (req, res) => {
   };
 
   if (TICKET_URL) {
-    base.additional_contents = {
-      content: "Acompanhe seu atendimento aqui:",
+    resp.additional_contents = {
+      content: "Acompanhe seu atendimento pelo botão abaixo:",
       buttons: [{ label: "Abrir ticket", url: TICKET_URL }]
     };
   }
 
-  return res.json(base);
+  return res.json(resp);
 });
 
 app.listen(PORT, () => console.log(`Ease Hooks ${SERVICE_NAME} ouvindo em :${PORT}`));
