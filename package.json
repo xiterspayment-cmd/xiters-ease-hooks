@@ -1,10 +1,10 @@
 {
   "name": "xiters-ease-hooks",
   "version": "1.0.0",
-  "type": "module",
+  "description": "Hooks API for Ease Bot (serviço infinito)",
+  "main": "index.js",
+  "type": "commonjs",
   "scripts": { "start": "node index.js" },
-  "dependencies": {
-    "express": "^4.19.2",
-    "cors": "^2.8.5"
-  }
+  "engines": { "node": ">=18" },
+  "dependencies": { "express": "^4.19.2" }
 }
